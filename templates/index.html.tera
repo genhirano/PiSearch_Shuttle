@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>Pi Search</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css">
+</head>
+
+<body>
+  <section class="hero is-primary is-small">
+    <div class="hero-body">
+      <div class="container has-text-centered ">
+        <p class="title    has-text-white">Pi Search</p>
+        <p class="subtitle    has-text-white">Find the point of appearance of pi.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container has-text-centered">
+      <div class="columns is-mobile">
+        <div class="column is-half is-offset-one-quarter box">
+          <form action="/" method="post">
+            <label for="input">Target natural number (left zero filled)</label>
+            <div class="field">
+              <div class="control is-large">
+                <input type="text" id="inputBox" name="target" class="input is-large  is-warning has-text-centered"
+                  autocomplete="off" placeholder="search target input!" value="{{ result_target }}" />
+              </div>
+              <div class="message" id="message"></div>
+            </div>
+            <button disabled id="submitButton" type="submit" class="button  is-rounded  magnifying-glass ">
+              <!--is-loading-->
+              <span>Search!</span>
+              <span class="icon is-small">
+                <i class="fas fa-search"></i>
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <br>
+    <br>
+  </section>
+
+  <section>
+    <div class="container has-text-centered">
+      <div class="columns is-mobile">
+        <div class="column is-half is-offset-one-quarter box">
+          {% if result_pos != "" %}
+          <p>Result</p>
+          <p>Search target : {{ result_target }}</p>
+          <p>appearance pos : {{ result_pos }}</p>
+          {% else %} 
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <br>
+    <br>
+  </section>
+
+
+  <footer class="footer has-background-primary has-text-white">
+
+    <p class="has-text-centered">
+      <a class="button is-black" href="https://github.com/genhirano/PiSearch_Shuttle" target="_blank">
+        project github : <span class="icon"><i class="fab fa-github"></i></span>
+      </a>
+    </p>
+    <br>
+
+    <p class="has-text-centered">
+      Copyright © 2022-2024 genhirano
+    </p>
+    <p class="has-text-centered">
+      All Rights Reserved
+    </p>
+    <p align="center">
+      <a class="button is-link" href="https://www.facebook.com/genhirano" target="_blank">
+        contact : <span class="icon"><i class="fab fa-facebook"></i></span>
+      </a>
+      <a class="button is-black" href="https://github.com/genhirano" target="_blank">
+        contact : <span class="icon"><i class="fab fa-github"></i></span>
+      </a>
+    </p>
+  </footer>
+
+  <script>
+    const inputBox = document.getElementById('inputBox');
+    const message = document.getElementById('message');
+    const submitButton = document.getElementById('submitButton');
+
+    inputBox.addEventListener('input', () => {
+      const value = inputBox.value;
+      let errorMessage = '';
+
+      // Check if the input is not empty
+      if (value === '') {
+        errorMessage = 'Input is required.';
+      }
+
+      // Check if the input is a number and within the length constraint
+      if (!/^[0-9]{1,5}$/.test(value)) {
+        errorMessage = 'Input must be a number (0-9) and 5 characters or fewer.';
+      }
+
+      // Display the error message
+      message.textContent = errorMessage;
+
+      submitButton.disabled = errorMessage !== '';
+
+      if (errorMessage !== '') {
+        inputBox.classList.add('is-warning');
+      } else {
+        inputBox.classList.remove('is-warning');
+      }
+
+
+    });
+  </script>
+
+</body>
+
+</html>

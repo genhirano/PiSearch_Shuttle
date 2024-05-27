@@ -8,3 +8,11 @@ rocket = "0.5.0"
 shuttle-rocket = "0.45.0"
 shuttle-runtime = "0.45.0"
 tokio = "1.26.0"
+byteorder = "1.4.3"
+regex = "1"
+chrono = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+
+[dependencies.rocket_dyn_templates]
+version = "0.2.0"
+features = ["handlebars","tera"]
