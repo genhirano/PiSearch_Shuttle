@@ -56,13 +56,13 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
 
   * cargo-shuttleで、プロジェクトスケルトンを作成
     ```
-    C:\dev\ > cargo shuttle init
+    $ > cargo shuttle init
     What do you want to name your project?
     It will be hosted at ${project_name}.shuttleapp.rs, so choose something unique!
     ✔ Project name · pisearch
 
     Where should we create this project?
-    ✔ Directory · C:\dev\pisearch
+    ✔ Directory · ***\pisearch
 
     What type of project template would you like to start from?
     ❯ A Hello World app in a supported framework
@@ -70,7 +70,7 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
 
     ✔ Select template · Rocket - Simple and easy-to-use web framework
 
-    Creating project "pisearch" in "C:\dev\pisearch"
+    Creating project "pisearch" in "***\pisearch"
 
     ✔ Claim the project name "pisearch" by starting a project container on Shuttle? · yes
 
@@ -97,7 +97,7 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
   * ローカル実行
     ```
     $ > cargo shuttle run
-      Building C:\dev\pisearch
+      Building ***\pisearch
       Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s
       [Runtime] shuttle-runtime 0.45.0 executable started
       [Runtime] Shuttle's default tracing subscriber is initialized!
@@ -116,7 +116,7 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
   * git commit
     * デプロイする前にcommitしていないとダメみたい
     ```
-    C:\dev\pisearch>cargo shuttle deploy
+    $ >cargo shuttle deploy
     Error: 4 files in the working directory contain changes that were not yet committed into git:
     .gitignore
     Cargo.lock
@@ -134,6 +134,10 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
   * おわり！
 ### Let'sプログラミング
 ### Suttleデプロイ
+* cargo shuttle deploy だが、テストがない、またはテストがfailするとDeployが失敗する。
+  * デプロイ時にテストをスキップする方法
+    ```
+    $ > cargo shuttle deploy --no-test  
+    ```
 ### TEST
 ### リリース！
-
