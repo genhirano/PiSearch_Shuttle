@@ -1,50 +1,20 @@
+use crate::ycd::YCD;
+use num_format::{Locale, ToFormattedString};
 use rocket::form::Form;
 use rocket::serde::Serialize;
 use rocket::{get, post, routes, FromForm};
 use rocket_dyn_templates::Template;
-use crate::ycd::YCD;
 
 mod ycd;
 mod ycdfile;
-/* 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
-*/
-/* 
+
 #[shuttle_runtime::main]
 async fn main() -> shuttle_rocket::ShuttleRocket {
-    let rocket = rocket::build().mount("/", routes![index]);
-
-    Ok(rocket.into())
-}
-*/
-
-/* 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
-    let _ = rocket::build()
-        .mount("/", routes![index, search])
-        .attach(Template::fairing())
-        .launch()
-        .await?;
-    Ok(())
-}
-*/
-#[shuttle_runtime::main]
-async fn main() -> shuttle_rocket::ShuttleRocket {
-    //let rocket = rocket::build().mount("/", routes![index]);
-
     let rocket = rocket::build()
-    .mount("/", routes![index, search])
-    .attach(Template::fairing());
-    //.launch()
-    //.await;
-
+        .mount("/", routes![index, search])
+        .attach(Template::fairing());
     Ok(rocket.into())
 }
-
 
 #[derive(Serialize)]
 struct Context {
@@ -64,11 +34,10 @@ async fn index() -> Template {
 #[derive(FromForm)]
 struct PostData {
     target: String,
-  }
+}
 
-#[post("/", data="<arg_target>")]
-async fn search(arg_target : Form<PostData>) -> Template {
-
+#[post("/", data = "<arg_target>")]
+async fn search(arg_target: Form<PostData>) -> Template {
     let target = &arg_target.target;
 
     if !is_valid_number(target.as_str()) || target.is_empty() {
@@ -79,18 +48,22 @@ async fn search(arg_target : Form<PostData>) -> Template {
         return Template::render("index", &context);
     }
 
-    let result = match search_pi(target.clone()).await {
-        Some(pos) => pos.to_string(),
-        None => "not found...".to_string(),
+    let context = match search_pi(target.clone()).await {
+        Some(pos) => {
+            let formatted_result = pos.to_formatted_string(&Locale::en);
+            Context {
+                result_target: target.clone(),
+                result_pos: formatted_result,
+            }
+        }
+        None => Context {
+            result_target: target.clone(),
+            result_pos: "not found...".to_string(),
+        },
     };
 
-    let context = Context {
-        result_target: target.clone(),
-        result_pos: result.to_string(),
-    };
     return Template::render("index", &context);
 }
-
 
 fn is_valid_number(s: &str) -> bool {
     s.chars().all(|c| c.is_digit(10))
