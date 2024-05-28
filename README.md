@@ -1,27 +1,51 @@
-# PiSearch_Shuttle
-Rustで簡単なWebアプリを作成して、Suttleで公開する。
+# PiSearch_Shuttle（円周率検索アプリ作成と公開）
+プログラミング言語「Rust」を使って簡単なWebアプリ（簡単な円周率検索）を作成し、 **[Rustを完全に理解](https://note.com/teched/n/n555f4f5f9344)** する
 ## このプロジェクトの概要
-* Rust言語を学んで「完全に理解した」まで到達する
-* Rust with Rocket でWebアプリを作ってみる。テーマ：「円周率の検索」
-* SuttleでWebアプリを公開する
-## 必要な知識
-### Rust（プログラミング言語）
-### Rocket（RustのWEBフレームワーク）
-### Suttle（Rustのホスティング）
+* Rust言語を[「完全に理解した」](https://note.com/teched/n/n555f4f5f9344)まで到達する
+* これを実践を通して達成するため、Rust with Rocket でWebアプリを作ってみる（テーマ：「円周率の検索」）
+*  **作るだけではなく、** 公開する
+## 対象
+* Rust（プログラミング言語）
+* Rocket /  rocket_dyn_templates （RustのWEBフレームワーク）
+* Suttle（Rustアプリケーションのホスティング）
 ## 手順
-### Rust環境構築
-* [RUST Install](https://www.rust-lang.org/ja/learn/get-started)
+### Rust環境構築/Hello World!
+* [Rust Install](https://www.rust-lang.org/ja/learn/get-started)
 * Rustのいろいろ管理ツール「Cargo」が入る
   ```
   $>cargo --version
   cargo 1.78.0 (54d8815d0 2024-03-26)
   ```
-  * プロジェクトのビルドにはcargo build
-  * プロジェクトの実行にはcargo run
-  * プロジェクトのテストにはcargo test
-  * プロジェクトのドキュメントのビルドにはcargo doc
-### Suttle基本知識習得
-* [Suttle](https://www.shuttle.rs/)
+  * 虎の巻
+    * プロジェクトのビルドにはcargo build
+    * プロジェクトの実行にはcargo run
+    * プロジェクトのテストにはcargo test
+    * プロジェクトのドキュメントのビルドにはcargo doc
+  * new して Runしてみる
+    ```
+    $ >cargo new myFirstRust
+        Creating binary (application) `myFirstRust` package
+      warning: the name `myFirstRust` is not snake_case or kebab-case which is recommended for package names, consider `myfirstrust`
+      note: see more `Cargo.toml` keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+    $>cd myFirstRust
+
+    $>cargo run
+     Compiling myFirstRust v0.1.0 (C:\dev\myFirstRust)
+      Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.01s
+       Running `target\debug\myFirstRust.exe`
+    Hello, world!
+    ```
+  * "Hello, Wold!" 表示されました！
+  * このプログラムは、Cargo new の時にCargoが自動的に作っている。ソースコードはこちら
+    * src/main.rs
+    ```rust
+    fn main() {
+     println!("Hello, world!");
+    }
+    ```
+### Suttle環境構築、スケルトンプロジェクト作成、そのデプロイ
+#### Suttleとは？ →[Suttle](https://www.shuttle.rs/)
 ```
 What is Shuttle?
 Shuttle is a Rust-native cloud development platform that lets you deploy your app while also taking care of all of your infrastructure.
@@ -30,8 +54,7 @@ Shuttle is a Rust-native cloud development platform that lets you deploy your ap
 Shuttleとは何ですか？
 Rustアプリのデプロイを受け付けて、アプリ実行インフラとを提供するクラウド開発プラットフォーム。アプリ実行に必要なDBなども準備できる。
 ```
-
-### Suttleスケルトン（Rustプロジェクト）作成
+#### Suttleスケルトン（Rustプロジェクト）作成
 * Steps
   * アカウント作成
     * [Shuttle Login](https://console.shuttle.rs/login)
@@ -47,7 +70,7 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
     $ >cargo shuttle --version
     cargo-shuttle 0.45.0
     ```
-  * cargo-shuttleで、Suttleアカウントログイン
+  * cargo-shuttleで、CLIクライアントによるSuttleアカウントログイン
     ```
     $ > cargo shuttle login
     ```
@@ -111,18 +134,13 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
     * ”Hello, world!” が表示される
   * ローカル停止
     * Ctrl + C
-### Suttleスケルトンデプロイ
+#### Suttleスケルトンデプロイ
 * Steps
   * git commit
     * デプロイする前にcommitしていないとダメみたい
     ```
     $ >cargo shuttle deploy
     Error: 4 files in the working directory contain changes that were not yet committed into git:
-    .gitignore
-    Cargo.lock
-    Cargo.toml
-    src/
-
     To proceed despite this and include the uncommitted changes, pass the `--allow-dirty` or `--ad` flag
     ```
   * デプロイ
@@ -130,14 +148,38 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
     $ > cargo shuttle deploy
       ```
   * Shuttle 管理画面でデプロイ済みを確認！
-  * アプリにアクセスしてHelloWorldを確認！
+  * アプリにアクセスしてHelloWorldを確認！ Ok!
+    * [デプロイ先にアクセス！](https://pisearch.shuttleapp.rs)
   * おわり！
 ### Let'sプログラミング
-### Suttleデプロイ
-* cargo shuttle deploy だが、テストがない、またはテストがfailするとDeployが失敗する。
+* 設計
+  * 全体概要
+    * 円周率データ(複数のYCDファイル)から、WEB画面からの入力による検索ターゲットを検索して画面に表示する。
+  * 構成
+    * main
+      * 概要：WEBアクセス処理、円周率検索
+      * 機能：WEBから検索文字列を受け取り、ヒットするまでYCDが提供するブロック単位で検索し、ヒットした場所（円周率少数点以下桁数）をWEB画面に返す。
+      * 画面：index.html（テンプレートエンジンを使って生成してクライアントへ帰す）
+    * ycd(YCDクレート)
+      * 概要：複数のYCDFileを順番に管理する
+      * 機能：指定フォルダにある***.ycdファイルを、ファイル名順に複数管理する。最小のYCDFileから順次1000ブロック単位で読み、そのYCDFileの全てのブロックが読み終わったら次のYCDFileへシームレスに移行する。
+      * その他：ブロック跨り、又はファイルまたがりの部分に検索文字列が跨る場合があるので工夫が必要。
+    * ycdfile(YCDFileクレート)
+      * 概要：YCDファイル１つに対応し、I/O管理する（ReadOnly）
+      * 機能：YCDヘッダの取得と保持、円周率データの1ブロック(8バイトの19桁)毎に提供
+* 実装
+  * プログラミング言語：Rust、WEBフレームワーク：Rocket、TemplateEngine：rocket_dyn_templates
+### 公開
+#### Shuttleデプロイ
+* $ >cargo shuttle deploy → 失敗！
+* テストがfailするとDeployが失敗する。
   * デプロイ時にテストをスキップする方法
     ```
     $ > cargo shuttle deploy --no-test  
     ```
-### TEST
-### リリース！
+#### アクセスしてみる
+* [デプロイ先にアクセス！](https://pisearch.shuttleapp.rs)
+* 表示された！
+
+---
+# [Rustプログラミング、完全に理解しました！](https://note.com/teched/n/n555f4f5f9344)
