@@ -10,39 +10,36 @@
 </head>
 
 <body class="has-background-white-ter">
-  <section class="hero is-primary is-small">
+  <section style="background-color:#19a974;" class="hero is-small">
     <div class="hero-body">
       <div class="container has-text-centered ">
         <p class="title has-text-white is-1">Pi Search</p>
         <p class="subtitle has-text-white" style="line-height:0;">Find the point of appearance of pi.</p>
-        <p class="has-text-white" style="line-height:1;" >円周率の中から探します</p>
+        <p class="has-text-white" style="line-height:1;">円周率の中から探します</p>
       </div>
     </div>
   </section>
 
   <section>
-    <div class="container has-text-centered">
-      <div class="columns is-mobile">
-        <div class="column is-half is-offset-one-quarter box has-background-white">
-          <form action="/" method="post">
-            <label for="input">Input search target</label>
-            <div class="field">
-              <div class="control is-large">
-                <input type="text" id="inputBox" name="target" class="input is-large is-warning has-text-centered has-background-white-ter"
-                  autocomplete="off" placeholder="search target input!" value="{{ result_target }}" />
-              </div>
-              <p class="message" id="message"></p>
-            </div>
-            <button disabled id="submitButton" type="submit" class="button is-rounded magnifying-glass">
-              <!--is-loading-->
-              <span>Search!</span>
-              <span class="icon is-small">
-                <i class="fas fa-search"></i>
-              </span>
-            </button>
-          </form>
+    <div style="width:350px" class="container has-text-centered box has-background-white">
+      <form action="/" method="post">
+        <label class="has-text-black" for="input">Input search target</label>
+        <div class="field">
+          <div class="control is-large">
+            <input type="text" id="inputBox" name="target"
+              class="input is-large is-warning has-text-centered has-background-white-ter has-text-black"
+              autocomplete="off" placeholder="search target input!" value="{{ result_target }}" />
+          </div>
+          <p class="message" id="message"></p>
         </div>
-      </div>
+        <button disabled id="submitButton" type="submit" class="button is-rounded magnifying-glass">
+          <!--is-loading-->
+          <span>Search!</span>
+          <span class="icon is-small">
+            <i class="fas fa-search"></i>
+          </span>
+        </button>
+      </form>
     </div>
   </section>
 
@@ -52,23 +49,16 @@
   </section>
 
   {% if result_pos != "" %}
-  <section>
-    <div class="container has-text-centered">
-      <div class="columns is-mobile">
-        <div class="column is-half is-offset-one-quarter box has-background-white">
-          <h1 class="title is-1 is-spaced">Result</h1>
-          <h4 class="subtitle is-4" style="line-height:1;">Search target</h4>
-          <p class="is-size-3" style="line-height:0;">"{{ result_target }}"</p>
-          <br/>
-          <br/>
-          <h4 class="subtitle is-4" style="line-height:1;">Appearance position is</h4>
-          <p class="is-size-3 has-text-weight-semibold" style="line-height:0;">{{ result_pos }}</p>
-          <p style="line-height:5;">桁目に出現</p>
-          <br/>
-          <br/>
-        </div>
-      </div>
-    </div>
+  <section class="has-text-black">
+    <div style="width:350px" class="has-text-black container has-text-centered box has-background-white">
+      <h1 class="has-text-black title is-1 is-spaced">Result</h1>
+      <h4 class="has-text-black subtitle is-4" style="line-height:1;">Search target</h4>
+      <p class="has-text-black is-size-3" style="line-height:0;">"{{ result_target }}"</p>
+      <br />
+      <br />
+      <h4 class="has-text-black subtitle is-4" style="line-height:1;">Appearance position is</h4>
+      <p class="has-text-black is-size-3 has-text-weight-semibold" style="line-height:0;">{{ result_pos }}</p>
+      <p class="has-text-black" style="line-height:5;">桁目に出現</p>
     </div>
   </section>
   {% endif %}
@@ -79,9 +69,10 @@
   </section>
 
 
-  <footer class="footer has-background-primary has-text-white">
+  <footer style="background-color:#19a974;" class="footer has-text-white">
     <p class="has-text-centered has-text-weight-semibold">
-      hosted by <a href="https://www.shuttle.rs/" target="_blank">"Shuttle"</a> and written in the <a href="https://www.rust-lang.org/" target="_blank">"Rust"</a>.
+      hosted by <a href="https://www.shuttle.rs/" target="_blank">"Shuttle"</a> and written in the <a
+        href="https://www.rust-lang.org/" target="_blank">"Rust"</a>.
     </p>
     <br>
     <p class="has-text-centered">
