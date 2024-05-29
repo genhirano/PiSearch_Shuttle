@@ -185,3 +185,18 @@ Rustアプリのデプロイを受け付けて、アプリ実行インフラと�
 
 ---
 # [Rustプログラミング、完全に理解しました！](https://note.com/teched/n/n555f4f5f9344)
+
+
+---
+#### 代表的な円周率検索サイト
+* PiSearch
+  * https://pisearch.joshkeegan.co.uk/
+* Irrational Numbers Search Engine
+  * https://www.subidiom.com/pi/
+* The Pi-Search Page
+  * https://www.angio.net/pi/
+* Pi Search
+  * https://katiesteckles.co.uk/pisearch/
+
+
+
