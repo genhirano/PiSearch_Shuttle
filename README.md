@@ -1,5 +1,7 @@
-# PiSearch_Shuttle（円周率検索アプリ作成と公開）
-プログラミング言語「Rust」を使って簡単なWebアプリ（簡単な円周率検索）を作成し、 **[Rustを完全に理解](https://note.com/teched/n/n555f4f5f9344)** する
+[公開中！] → https://pisearch.shuttleapp.rs
+
+# PiSearch_Shuttle（円周率検索アプリ）
+**プログラミング言語「Rust」を使って** 簡単なWebアプリ（簡単な円周率検索）を作成し、 **[Rustを完全に理解](https://note.com/teched/n/n555f4f5f9344)** する
 ## このプロジェクトの概要
 * Rust言語を[「完全に理解した」](https://note.com/teched/n/n555f4f5f9344)まで到達する
 * これを実践を通して達成するため、Rust with Rocket でWebアプリを作ってみる（テーマ：「円周率の検索」）
