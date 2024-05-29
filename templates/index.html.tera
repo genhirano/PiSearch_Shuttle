@@ -24,7 +24,7 @@
     <div class="hero-body">
       <div class="container has-text-centered ">
         <p class="title has-text-white is-1">Pi Search</p>
-        <p class="subtitle has-text-white" style="line-height:0;">Find the point of appearance of pi.</p>
+        <p class="subtitle has-text-white" style="line-height:0;">Find the point of appearance of Pi.</p>
         <p class="has-text-white" style="line-height:1;">円周率の中から探します</p>
       </div>
     </div>
