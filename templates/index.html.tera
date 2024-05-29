@@ -40,7 +40,8 @@
               class="input is-large is-warning has-text-centered has-background-white-ter has-text-black"
               autocomplete="off" placeholder="search target input!" value="{{ result_target }}" />
           </div>
-          <p class="message" id="message"></p>
+          <p class="has-text-danger" id="message"></p>
+          <p class="has-text-danger" id="messageJP"></p>
         </div>
         <button disabled id="submitButton" type="submit" class="button is-rounded magnifying-glass">
           <!--is-loading-->
@@ -69,6 +70,7 @@
       <h4 class="has-text-black subtitle is-4" style="line-height:1;">Appearance position is</h4>
       <p class="has-text-black is-size-3 has-text-weight-semibold" style="line-height:0;">{{ result_pos }}</p>
       <p class="has-text-black" style="line-height:5;">桁目に出現</p>
+      <p class="has-text-black">The 3. is not counted.</p>
     </div>
   </section>
   {% endif %}
@@ -111,22 +113,27 @@
   <script>
     const inputBox = document.getElementById('inputBox');
     const message = document.getElementById('message');
+    const messageJP = document.getElementById('messageJP');
     const submitButton = document.getElementById('submitButton');
 
     inputBox.addEventListener('input', () => {
       const value = inputBox.value;
       let errorMessage = '';
+      let errorMessageJP = '';
 
       if (value === '') {
         errorMessage = 'Input is required.';
+        errorMessageJP = '入力が必要です。';
       }
 
       if (!/^[0-9]{1,6}$/.test(value)) {
         errorMessage = 'Must be a (0-9) and Up to 6 chars';
+        errorMessageJP = '数字(0-9)、最大6桁まで';
       }
 
       // Display the error message
       message.textContent = errorMessage;
+      messageJP.textContent = errorMessageJP;
 
       submitButton.disabled = errorMessage !== '';
 
