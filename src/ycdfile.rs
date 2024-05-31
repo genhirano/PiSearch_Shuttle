@@ -73,7 +73,7 @@ impl YCDFile {
     }
 
     #[allow(dead_code)]
-        fn filename(&self) -> &String {
+    fn filename(&self) -> &String {
         &self.filename
     }
     #[allow(dead_code)]
@@ -85,8 +85,11 @@ impl YCDFile {
         self.block_count
     }
 
+    /*
+     * ヘッダー情報を取得する
+     */
     fn get_header_info(&mut self, file_name: &str) -> io::Result<()> {
-        /* ヘッダーの例
+        /* YCDファイルのヘッダーの例 ファイルヘッダはテキスト形式で、以下のような形式になっている
         #Compressed Digit File
 
         FileVersion:	1.1.0
@@ -102,37 +105,48 @@ impl YCDFile {
 
         EndHeader
 
+        ※ここに終了マークとして 0 がある
         */
-        let mut headreader: BufReader<File> = BufReader::new(File::open(file_name)?);
-        let mut vec: Vec<u8> = Vec::new();
-        let mut buf: [u8; 1] = [0; 1];
 
+        let mut headreader: BufReader<File> = BufReader::new(File::open(file_name)?);
+        let mut read_vec: Vec<u8> = Vec::new();
         let mut header_end_point: i32 = 0;
 
-        for i in 1..1000000 {
+        for i in 1.. {
             //1バイトずつ読み込んでVectorに積んでいく
+            let mut buf: [u8; 1] = [0; 1];
             match headreader.read(&mut buf)? {
                 0 => break, //readメソッドが0を返した場合（つまり、読み込むデータがない場合）
                 n => {
                     let buf2: &[u8] = &buf[..n]; //スライス
-                    vec.push(buf2[0]);
+                    read_vec.push(buf2[0]);
                 }
             }
-            if let Some(&0) = vec.last() {
+            if let Some(&0) = read_vec.last() {
                 //ヘッダーの終了マークである"0"に到達したら、そこまでをヘッダーサイズとする
                 header_end_point = i;
                 break;
             }
+
+            //ヘッダー終了マークが見つからなかったら（1000文字読んで)見つからなかった場合はエラー
+            if header_end_point > 10000 {
+                panic!("Header end point not found");
+            }
         }
 
-        let slice: &[u8] = &vec[..];
-        let s: &str = std::str::from_utf8(&slice).unwrap();
+        //ヘッダーの終了マークが見つからなかった場合はエラー
+        if header_end_point <= 0 {
+            panic!("Header end point not found");
+        }
+
+        //ヘッダー全体のバイト列を文字列に変換
+        let s = std::str::from_utf8(&read_vec[..]).unwrap();
 
         // 連続する改行を一つの改行にまとめる
         let re = Regex::new(r"\n+").unwrap();
         let s2 = re.replace_all(s, "\n");
 
-        // 改行文字で改行で分割して、それぞれベクターに格納
+        // 改行文字で改行で分割してベクターに格納
         let mut vec: Vec<String> = s2.split('\n').map(|s| s.to_string()).collect();
 
         // Vectorから改行のみの文字列と空の文字列を削除
@@ -145,7 +159,7 @@ impl YCDFile {
             *x = x.replace("\t", "");
         }
 
-        // ヘッダー情報をHashMapに格納
+        // ヘッダー情報をHashMapに格納(生文字列は key:Value という文字列形式になっている)
         self.header = vec
             .iter()
             .map(|s| {
@@ -164,6 +178,9 @@ impl YCDFile {
         Ok(())
     }
 
+    /*
+     * 次の1ブロック(19桁)を読み込む
+     */
     pub fn read_one_block(&mut self) -> Option<Block> {
         if self.block_count < self.current_block_no {
             return None;
@@ -175,9 +192,10 @@ impl YCDFile {
                 let num: u64 = LittleEndian::read_u64(&buf);
                 format!("{:019}", num)
             }
-            Err(_e) => panic!("Failed to get header size: {}", _e)
+            Err(_e) => panic!("Failed to get header size: {}", _e),
         };
 
+        //最後のブロックの場合、余り桁を削除する。最終桁より後ろはゴミデータ
         if self.block_count == self.current_block_no {
             let blocksize: i64 = self.header["Blocksize"].parse().unwrap();
             let amari = blocksize % 19;
@@ -188,12 +206,14 @@ impl YCDFile {
                 .collect::<String>();
         }
 
+        //戻り値としてのBlock構造体を生成
         let block = Block {
             block_no: self.current_block_no,
             pos: 1 + ((self.current_block_no - 1) * 19) + self.base_pos,
             data: num_str,
         };
 
+        //現在読み込み済みのブロック番号を+1
         self.current_block_no += 1;
 
         return Some(block);
